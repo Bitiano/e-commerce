@@ -1,0 +1,42 @@
+main {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-backoffice {
+    text-align: center;
+}
+
+.section-backoffice h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.section-backoffice .box-btns .btn {
+    margin: 0 0.5rem;
+    border: 2px solid #2A2C4C;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+}
+
+.section-backoffice .box-btns .btn-users-list {
+    background-color: #2A2C4C;
+    color: #fff;
+}
+
+.section-backoffice .box-btns .btn-users-list:hover {
+    background-color: #fff;
+    color: #2A2C4C;
+}
+
+.section-backoffice .box-btns .btn-products-list {
+    background-color: transparent;
+    color: #2A2C4C;
+}
+
+.section-backoffice .box-btns .btn-products-list:hover {
+    background-color: #2A2C4C;
+    color: #fff;
+}

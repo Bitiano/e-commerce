@@ -1,17 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/img/logo-yks.svg" type="image/x-icon">
     <link rel="stylesheet" href="/css/global/reset.css">
     <link rel="stylesheet" href="/css/global/styles.css">
-    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="/css/pages/users-list.css">
+    <title>Lista de Usuarios | YKS</title>
 </head>
+
 <body>
-    
+
     <header class="header"></header>
 
+    <main>
+        <section class="section-users-list">
+            <div class="container">
+                <h1>Lista de Usuários</h1>
+
+                <div class="row">
+                    <input type="text" id="search" placeholder="Pesquisar usuário por nome">
+                    <a href="register-user.html" class="btn">
+                        <img src="/assets/icons/plus.svg" alt="Adicionar Usuário">
+                        Adicionar Usuário
+                    </a>
+                </div>
+
+                <div class="row">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Grupo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="user-list">
+                        </tbody>
+
+                        <div id="message"></div>
+                    </table>
+                </div>
+  
+            </div>
+        </section>
+    </main>
+
     <script src="/js/components/header/header.js"></script>
+    <script type="module" src="/js/components/users-list/userList.js"></script>
 </body>
+
 </html>

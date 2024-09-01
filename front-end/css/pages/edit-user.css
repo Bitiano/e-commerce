@@ -1,0 +1,59 @@
+main .container {
+    padding: 6rem 0;
+    text-align: center;
+}
+
+main h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+main #form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+main #form-container .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+main #form-container .form-group label {
+    margin-bottom: 0.5rem;
+}
+
+main #form-container .form-group input {
+    padding: .5rem;
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #777baa;
+    outline: none;
+}
+
+main #form-container .form-group input:focus {
+    border-bottom: 1px solid #2A2C4C;
+}
+
+main #form-container .form-group select {
+    padding: .5rem;
+    font-size: 1rem;
+}
+
+main #form-container button {
+    width: 100%;
+    padding: .6rem;
+    background-color: #2A2C4C;
+    color: #fff;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+main #form-container button:hover {
+    opacity: 0.8;
+}
