@@ -1,12 +1,20 @@
 import { createUserRow } from './userRow.js';
-import { filterUsers } from './filterUsers.js';
 
-const users = [
-    { name: 'teste1', email: 'teste1@gmail.com', status: 'Ativo', group: 'Administrador' },
-    { name: 'teste2', email: 'teste2@gmail.com', status: 'Ativo', group: 'Administrador' },
-    { name: 'teste3', email: 'teste3@gmail.com', status: 'Ativo', group: 'Administrador' },
-    { name: 'Guilherme', email: 'guilherme@gmail.com', status: 'Ativo', group: 'Administrador' },
-];
+const API_URL = 'http://localhost:8080/usuario'; 
+
+async function fetchUsers(query = '') {
+    const token = 'seu-token-aqui';
+    try {
+        const response = await fetch(`${API_URL}/buscaUsuarios?nomeFiltro=${query}&token=${token}`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar usuários: ' + response.statusText);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 function renderUserList(users) {
     const userListTable = document.querySelector('#user-list');
@@ -18,10 +26,10 @@ function renderUserList(users) {
     });
 }
 
-renderUserList(users);
-
-document.getElementById('search').addEventListener('input', (event) => {
+document.getElementById('search').addEventListener('input', async (event) => {
     const query = event.target.value;
-    const filteredUsers = filterUsers(users, query);
-    renderUserList(filteredUsers); 
+    const filteredUsers = await fetchUsers(query);
+    renderUserList(filteredUsers);
 });
+
+fetchUsers().then(renderUserList);
