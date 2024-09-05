@@ -1,35 +1,39 @@
-import { createUserRow } from './userRow.js';
-
-const API_URL = 'http://localhost:8080/usuario'; 
-
-async function fetchUsers(query = '') {
-    const token = 'seu-token-aqui';
-    try {
-        const response = await fetch(`${API_URL}/buscaUsuarios?nomeFiltro=${query}&token=${token}`);
-        if (!response.ok) {
-            throw new Error('Erro ao buscar usuários: ' + response.statusText);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        return [];
+import { createUserRow } from "./userRow.js";
+document.addEventListener('DOMContentLoaded', async function() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '../login.html'; 
+        return;
     }
-}
 
-function renderUserList(users) {
-    const userListTable = document.querySelector('#user-list');
-    userListTable.innerHTML = '';
+    try {
+        const response = await fetch('http://localhost:8080/usuario/buscaUsuarios?token=' + token, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    users.forEach(user => {
-        const row = createUserRow(user);
-        userListTable.appendChild(row);
-    });
-}
-
-document.getElementById('search').addEventListener('input', async (event) => {
-    const query = event.target.value;
-    const filteredUsers = await fetchUsers(query);
-    renderUserList(filteredUsers);
+        if (response.ok) {
+            const users = await response.json();
+            renderUserList(users);
+        } else {
+            const error = await response.text();
+            document.getElementById('message').textContent = `Erro: ${error}`;
+            document.getElementById('message').style.color = 'red';
+        }
+    } catch (error) {
+        document.getElementById('message').textContent = `Erro: ${error.message}`;
+        document.getElementById('message').style.color = 'red';
+    }
 });
 
-fetchUsers().then(renderUserList);
+function renderUserList(users) {
+    const userListElement = document.getElementById('user-list');
+    userListElement.innerHTML = '';
+
+    users.forEach(user => {
+        const userRow = createUserRow(user);
+        userListElement.appendChild(userRow);
+    });
+}

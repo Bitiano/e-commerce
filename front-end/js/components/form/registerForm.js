@@ -31,8 +31,8 @@ export function createUserForm() {
         <div class="form-group">
             <label for="group">Grupo:</label>
             <select id="group" name="group" required>
-                <option value="Administrador">Administrador</option>
-                <option value="Estoquista">Estoquista</option>
+                <option value="ADMIN">Administrador</option>
+                <option value="ESTOQUISTA">Estoquista</option>
             </select>
         </div>
         <button type="submit">Cadastrar</button>

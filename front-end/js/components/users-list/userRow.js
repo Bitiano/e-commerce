@@ -4,15 +4,13 @@ export function createUserRow(user) {
     const row = document.createElement('tr');
 
     row.innerHTML = `
-        <td>${user.name}</td>
+        <td>${user.nome}</td>
         <td>${user.email}</td>
-        <td>${user.status}</td>
-        <td>${user.group}</td>
+        <td>${user.ativo ? 'Ativo' : 'Inativo'}</td>
+        <td>${user.grupo}</td>
         <td>
-            <button onclick="editUser('${user.email}')">Editar</button>
-            <button onclick="toggleUserStatus('${user.email}', '${user.status}')">
-                ${user.status === 'Ativo' ? 'Inativar' : 'Ativar'}
-            </button>
+            <button onclick="editUser(${user.id})">Editar</button>
+            <button onclick="toggleUserStatus(${user.id})">${user.ativo ? 'Desativar' : 'Ativar'}</button>
         </td>
     `;
 
@@ -21,4 +19,8 @@ export function createUserRow(user) {
     });
 
     return row;
+}
+
+window.editUser = function editUser(userId) {
+    window.location.href = `./edit-user.html?id=${userId}`;
 }

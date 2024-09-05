@@ -4,21 +4,24 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('/api/token/valid', {
+    const response = await fetch('http://localhost:8080/usuario/login', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, senha: password })
     });
 
-    const result = await response.json();
+    const messageElement = document.getElementById('message');
 
     if (response.ok) {
-        localStorage.setItem('token', result.token);
-
-        window.location.href = '/backoffice.html';
+        const token = await response.text();
+        localStorage.setItem('token', token);
+        messageElement.textContent = 'Login bem-sucedido!';
+        messageElement.style.color = 'green';
+        window.location.href = './pages/backoffice.html'; 
     } else {
-        document.getElementById('message').textContent = result.message || 'Erro ao fazer login';
+        messageElement.textContent = `Usuario ou senha inválidos!`;
+        messageElement.style.color = 'red';
     }
 });
