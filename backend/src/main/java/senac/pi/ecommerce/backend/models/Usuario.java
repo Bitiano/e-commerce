@@ -29,6 +29,9 @@ public class Usuario {
     private String email;
 
     @Column
+    private String grupo;
+
+    @Column
     private String senha;
 
     @Column

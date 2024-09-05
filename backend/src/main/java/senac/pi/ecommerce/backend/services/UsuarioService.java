@@ -136,6 +136,7 @@ public class UsuarioService {
             usuarioPayloadDto.setEmail(usuario.getEmail()); 
             usuarioPayloadDto.setId(usuario.getId());
             usuarioPayloadDto.setNome(usuario.getNome());
+            usuarioPayloadDto.setGrupo(usuario.getGrupo());
             
             return usuarioPayloadDto;
         } catch (ExpiredJwtException e) {
@@ -160,8 +161,8 @@ public class UsuarioService {
     public UsuarioPayloadDto buscaUsuario(String token, long id) {
         UsuarioPayloadDto usuarioPayloadDto = verificarUsuarioPorToken(token);
 
-        if(usuarioPayloadDto.getGrupo().equals("ADMIN")) {
-            return usuarioRepository.findById(id);
+        if (usuarioPayloadDto.getGrupo().equals("ADMIN")) {
+            return usuarioRepository.findUsuarioPayloadById(id);
         }
 
         return null;

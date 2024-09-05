@@ -87,12 +87,11 @@ public class UsuarioController {
 
     @GetMapping("buscaUsuarios")
     public List<UsuarioPayloadDto> buscaUsuarios(@RequestParam(required = false) String nomeFiltro, @RequestParam String token) {
-        List<UsuarioPayloadDto> u = userService.buscaUsuarios(nomeFiltro, token);
-
-        if(u != null) {
-            return u;
-        }else{
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Apenas admnistradores podem acessar a lista de usuários");
+        UsuarioPayloadDto usuario = userService.verificarUsuarioPorToken(token);
+        if (usuario.getGrupo().equals("ADMIN")) {
+            return userRepository.findAllUsuariosFilteredByName(nomeFiltro);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Apenas administradores podem acessar a lista de usuários");
         }
     }
 
