@@ -15,7 +15,7 @@ export function createUserRow(user) {
     `;
 
     row.querySelector('button:nth-child(2)').addEventListener('click', () => {
-        toggleUserStatus(user.email, user.status);
+        toggleUserStatus(user.email, user.status, user.id);
     });
 
     return row;
