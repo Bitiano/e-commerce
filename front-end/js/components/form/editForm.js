@@ -5,17 +5,12 @@ export function createUserEditForm(user) {
     form.innerHTML = `
         <div class="form-group">
             <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" value="${user.name}" required >
+            <input type="text" id="name" name="name" value="${user.nome}" required >
         </div>
 
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="${user.email}" required disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="cpf">CPF:</label>
-            <input type="text" id="cpf" name="cpf" value="${user.cpf}" required >
+            <input type="email" id="email" name="email" value="${user.email}" required >
         </div>
 
         <div class="form-group">
@@ -30,9 +25,9 @@ export function createUserEditForm(user) {
 
         <div class="form-group">
             <label for="group">Grupo:</label>
-            <select id="group" name="group">
-                <option value="administrador" ${user.group === 'administrador' ? 'selected' : ''}>Administrador</option>
-                <option value="estoquista" ${user.group === 'estoquista' ? 'selected' : ''}>Estoquista</option>
+            <select id="group" name="group" required>
+                <option value="ADMIN" ${user.grupo === 'ADMIN' ? 'selected' : ''}> Administrador</option>
+                <option value="ESTOQUISTA" ${user.grupo === 'ESTOQUISTA' ? 'selected' : ''}>Estoquista</option>
             </select>
         </div>
         <button type="submit">Salvar </button>
