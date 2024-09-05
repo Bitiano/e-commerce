@@ -14,6 +14,11 @@ export function createUserEditForm(user) {
         </div>
 
         <div class="form-group">
+            <label for="cpf">Cpf:</label>
+            <input type="text" id="cpf" name="cpf" value="${user.cpf}" required >
+        </div>
+
+        <div class="form-group">
             <label for="password">Nova Senha:</label>
             <input type="password" id="password" name="password" placeholder="Digite sua nova senha...">
         </div>

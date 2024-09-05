@@ -17,6 +17,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             "FROM Usuario u WHERE (:nomeFiltro IS NULL OR u.nome LIKE %:nomeFiltro%)")
     List<UsuarioPayloadDto> findAllUsuariosFilteredByName(@Param("nomeFiltro") String nomeFiltro);
 
-    @Query("SELECT new senac.pi.ecommerce.backend.models.UsuarioPayloadDto(u.id, u.nome, u.email, u.grupo, u.ativo) FROM Usuario u WHERE u.id = :id")
+    @Query("SELECT new senac.pi.ecommerce.backend.models.UsuarioPayloadDto(u.id, u.nome, u.email, u.grupo, u.ativo, u.cpf) FROM Usuario u WHERE u.id = :id")
     UsuarioPayloadDto findUsuarioPayloadById(@Param("id") long id);
 }

@@ -40,13 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const password = document.getElementById('password').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 const grupo = document.getElementById('group').value;
+                const cpf = document.getElementById('cpf').value;
 
                 if (password && password !== confirmPassword) {
                     alert('As senhas não são iguais. Tente novamente');
                     return;
                 }
 
-                const updatedUser = { nome, email, grupo };
+                const updatedUser = { nome, email, grupo, cpf };
                 if (password) {
                     updatedUser.senha = password;
                 }

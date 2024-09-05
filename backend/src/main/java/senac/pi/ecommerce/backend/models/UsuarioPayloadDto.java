@@ -16,12 +16,4 @@ public class UsuarioPayloadDto {
     private String grupo;
     private boolean ativo;
     private String cpf;
-
-    public UsuarioPayloadDto(long id, String nome, String email, String grupo, boolean ativo) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.grupo = grupo;
-        this.ativo = ativo;
-    }
 }
