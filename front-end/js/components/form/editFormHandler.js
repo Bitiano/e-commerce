@@ -35,18 +35,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             editForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                const name = document.getElementById('name').value;
+                const nome = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
-                const group = document.getElementById('group').value;
+                const grupo = document.getElementById('group').value;
 
                 if (password && password !== confirmPassword) {
                     alert('As senhas não são iguais. Tente novamente');
                     return;
                 }
 
-                const updatedUser = { name, email, group };
+                const updatedUser = { nome, email, grupo };
                 if (password) {
                     updatedUser.password = password;
                 }
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     if (response.ok) {
                         alert('Usuário atualizado com sucesso');
-                        window.location.href = '/pages/users-list.html';
+                        window.location.href = '/front-end/pages/users-list.html';
                     } else {
                         const errorData = await response.json();
                         alert(`Erro ao atualizar usuário: ${errorData.message}`);
