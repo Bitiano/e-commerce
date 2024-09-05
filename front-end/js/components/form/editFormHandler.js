@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const updatedUser = { nome, email, grupo };
                 if (password) {
-                    updatedUser.password = password;
+                    updatedUser.senha = password;
                 }
                 
 

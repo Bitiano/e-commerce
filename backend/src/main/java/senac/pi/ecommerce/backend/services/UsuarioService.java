@@ -70,6 +70,7 @@ public class UsuarioService {
     }
 
     public Usuario atualizar(Long id, Usuario usuario, String token) {
+        System.out.println(usuario.toString());
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         Usuario u = optionalUsuario.get();
         UsuarioPayloadDto usuarioLogado = verificarUsuarioPorToken(token);
@@ -77,6 +78,14 @@ public class UsuarioService {
         if(usuarioLogado.getGrupo().equals("ADMIN")) {
             if (optionalUsuario.isEmpty() || usuarioLogado.getEmail().equals(u.getEmail())) {
                 return null;
+            }
+
+            if (usuario.getSenha() != null) {
+                u.setSenha(usuario.getSenha());
+            }
+
+            if (usuario.getGrupo() != null){
+                u.setGrupo(usuario.getGrupo());
             }
 
             if(usuario.getNome() != null) {
