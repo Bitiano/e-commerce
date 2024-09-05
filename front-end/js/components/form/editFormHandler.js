@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (password) {
                     updatedUser.password = password;
                 }
-
+                
 
                 try {
                     const response = await fetch(`http://localhost:8080/usuario/atualizaUsuario/${userId}?token=${token}`, {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     if (response.ok) {
                         alert('Usuário atualizado com sucesso');
-                        window.location.href = '/front-end/pages/users-list.html';
+                        window.location.href = './users-list.html';
                     } else {
                         const errorData = await response.json();
                         alert(`Erro ao atualizar usuário: ${errorData.message}`);

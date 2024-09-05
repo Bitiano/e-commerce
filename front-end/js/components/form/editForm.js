@@ -10,7 +10,7 @@ export function createUserEditForm(user) {
 
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="${user.email}" required >
+            <input type="email" id="email" name="email" value="${user.email}" disabled >
         </div>
 
         <div class="form-group">

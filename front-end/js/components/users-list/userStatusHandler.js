@@ -1,6 +1,5 @@
 async function updateUserStatus(email, newStatus, userId) {
     
-    console.log(`Atualizando status do usuário: ${email} para ${newStatus}`);
     const token = localStorage.getItem('token');
     
     const response = await fetch(`http://localhost:8080/usuario/atualizaAcessoUsuario/${userId}?token=${token}`, {
