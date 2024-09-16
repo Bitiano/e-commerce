@@ -16,6 +16,6 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     @Query("SELECT c FROM Categoria c JOIN FETCH c.produtos p WHERE p.status <> false ORDER BY p.createdDate DESC")
     List<Categoria> findAllCategoriasWithFilteredProducts();
 
-    @Query("SELECT new com.senac.geekOpolis.models.CategoriaDto(c.id, c.nome) FROM Categoria c")
+    @Query("SELECT new senac.pi.ecommerce.backend.models.CategoriaDto(c.id, c.nome) FROM Categoria c")
     List<CategoriaDto> findAllCategoriesWithoutProducts();
 }
