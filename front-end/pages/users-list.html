@@ -21,6 +21,12 @@
                 <h1>Lista de Usuários</h1>
 
                 <div class="row">
+                    <button class="btn" onclick=backToHome()>
+                        voltar
+                    </button>
+                </div>
+
+                <div class="row">
                     <input type="text" id="search" placeholder="Pesquisar usuário por nome">
                     <a href="register-user.html" class="btn">
                         <img src="/assets/icons/plus.svg" alt="Adicionar Usuário">
@@ -54,6 +60,12 @@
 
     <script src="../js/components/header/header.js"></script>
     <script type="module" src="../js/components/users-list/userList.js"></script>
+
+    <script>
+        function backToHome() {
+            window.location.href = "backoffice.html";
+        }
+    </script>
 </body>
 
 </html>

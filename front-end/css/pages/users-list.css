@@ -9,12 +9,26 @@
 }
 
 .section-users-list .row:nth-child(2) {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.section-users-list .row:nth-child(2) button {
+    background-color: #2A2C4C;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.section-users-list .row:nth-child(3) {
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.section-users-list .row:nth-child(2) #search {
+.section-users-list .row:nth-child(3) #search {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -22,7 +36,7 @@
     font-size: 1.1rem;
 }
 
-.section-users-list .row:nth-child(2) .btn {
+.section-users-list .row:nth-child(3) .btn {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -32,22 +46,22 @@
     padding: 0.5rem 1rem;
 }
 
-.section-users-list .row:nth-child(2) .btn:hover {
+.section-users-list .row:nth-child(3) .btn:hover {
     opacity: 0.8;
 }
 
-.section-users-list .row:nth-child(3) .table{
+.section-users-list .row:nth-child(4) .table{
     width: 100%;
     border-collapse: collapse;
 }
 
-.section-users-list .row:nth-child(3) .table th {
+.section-users-list .row:nth-child(4) .table th {
     background-color: #2A2C4C;
     color: #fff;
     padding: 0.5rem 0;
 }
 
-.section-users-list .row:nth-child(3) .table td {
+.section-users-list .row:nth-child(4) .table td {
     border: 1px solid #ccc;
     padding: 0.5rem 0;
 }

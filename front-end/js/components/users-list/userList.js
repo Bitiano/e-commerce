@@ -1,39 +1,53 @@
 import { createUserRow } from "./userRow.js";
-document.addEventListener('DOMContentLoaded', async function() {
+
+document.addEventListener('DOMContentLoaded', async function () {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = '../login.html'; 
+        window.location.href = '../login.html';
         return;
     }
 
-    try {
-        const response = await fetch('http://localhost:8080/usuario/buscaUsuarios?token=' + token, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+    const searchInput = document.getElementById('search');
+    const userList = document.getElementById('user-list');
+
+    async function fetchUsers(nomeFiltro) {
+        try {
+            const response = await fetch(`http://localhost:8080/usuario/buscaUsuarios?nomeFiltro=${nomeFiltro}&token=${token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const users = await response.json();
+                return users;
+            } else {
+                document.getElementById('message').textContent = `Erro ao buscar usuários`;
+                document.getElementById('message').style.color = 'red';
+                return [];
             }
-        });
-
-        if (response.ok) {
-            const users = await response.json();
-            renderUserList(users);
-        } else {
-            const error = await response.text();
-            document.getElementById('message').textContent = `Erro: ${error}`;
+        } catch (error) {
+            document.getElementById('message').textContent = `Erro ao buscar usuários`;
             document.getElementById('message').style.color = 'red';
+            return [];
         }
-    } catch (error) {
-        document.getElementById('message').textContent = `Erro: ${error.message}`;
-        document.getElementById('message').style.color = 'red';
     }
-});
 
-function renderUserList(users) {
-    const userListElement = document.getElementById('user-list');
-    userListElement.innerHTML = '';
+    function renderUserList(users) {
+        userList.innerHTML = '';
+        users.forEach(user => {
+            const userRow = createUserRow(user);
+            userList.appendChild(userRow);
+        });
+    }
 
-    users.forEach(user => {
-        const userRow = createUserRow(user);
-        userListElement.appendChild(userRow);
+    searchInput.addEventListener('input', async (event) => {
+        const nomeFiltro = event.target.value;
+        const users = await fetchUsers(nomeFiltro);
+        renderUserList(users);
     });
-}
+
+    const users = await fetchUsers('');
+    renderUserList(users);
+});

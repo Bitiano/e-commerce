@@ -1,4 +1,5 @@
 import { createUserForm } from './registerForm.js';
+import { validateCPF } from './validateCPF.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const formContainer = document.getElementById('form-container');
@@ -16,13 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const confirmPassword = document.getElementById('confirmPassword').value;
         const group = document.getElementById('group').value;
         const token = localStorage.getItem('token');
+        
+        if (!validateCPF(cpf)) {
+            alert('CPF inválido. Tente novamente');
+            return;
+        }
 
         if (password !== confirmPassword) {
             alert('As senhas não são iguais. Tente novamente');
             return;
         }
 
-        const newUser = { nome: name, cpf, email, senha: password, grupo: group };
+        const newUser = { nome: name, cpf, email, ativo:true, senha: password, grupo: group };
         console.log(newUser);
 
         try {
