@@ -1,4 +1,4 @@
-import { createUserEditForm } from '../edit/editForm.js';
+import { createUserEditForm } from './editForm.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const formContainer = document.getElementById('form-container');

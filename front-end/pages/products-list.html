@@ -1,11 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Produtos | YKS</title>
+    <link rel="shortcut icon" href="../assets/img/logo-yks.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../css/global/reset.css">
+    <link rel="stylesheet" href="../css/global/styles.css">
+    <link rel="stylesheet" href="../css/pages/products-list.css">
+    <title>Lista de Produtos</title>
 </head>
+
 <body>
-    
+    <header class="header"></header>
+
+    <main>
+        <section class="section-products-list">
+            <div class="container">
+                <h1>Lista de Produtos</h1>
+
+                <div class="row">
+                    <button class="btn" onclick=backToHome()>
+                        voltar
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <input type="text" id="search" placeholder="Buscar produtos pelo nome...">
+                    <a href="register-product.html" class="btn">
+                        <img src="../assets/icons/plus.svg" alt="adicionar">
+                        Novo Produto
+                    </a>
+                </div>
+                
+                
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nome</th>
+                            <th>Quantidade</th>
+                            <th>Preço</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Camisa Barcelona</td>
+                            <td>10</td>
+                            <td>250</td>
+                            <td>Ativo</td>
+                            <td>
+                                <button id="editButton">Editar</button>
+                                <button id="toggleStatusButton">Desativar</button>
+                                <button id="viewButton">Visualizar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="modal">
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/components/products-list/productList.js"></script>     
+    <script src="../js/components/header/header.js"></script>
+    <script>
+        function backToHome() {
+            window.location.href = "backoffice.html";
+        }
+    </script>
 </body>
+
 </html>
