@@ -20,9 +20,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     long contarProdutos(@Param("nomeFiltro") String nomeFiltro);
 
 
-    @Query(value = "SELECT p.id, p.nome, p.avaliacao, p.descricao, p.preco, p.qtd_estoque, p.status, c.id AS categoria_id " +
+    @Query(value = "SELECT p.id, p.nome, p.avaliacao, p.descricao, p.preco, p.qtd_estoque, p.status " +
        "FROM produto p " +
-       "LEFT JOIN categoria c ON p.categoria_id = c.id " +
        "WHERE p.id = :id", nativeQuery = true)
     Produto findById(long id);
 }

@@ -9,19 +9,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 
-import senac.pi.ecommerce.backend.models.Categoria;
 import senac.pi.ecommerce.backend.models.Produto;
 import senac.pi.ecommerce.backend.models.ProdutoDto;
 import senac.pi.ecommerce.backend.models.ProdutoPayloadDto;
 import senac.pi.ecommerce.backend.models.UsuarioPayloadDto;
-import senac.pi.ecommerce.backend.repository.CategoriaRepository;
 import senac.pi.ecommerce.backend.repository.ProdutoRepository;
 
 @AllArgsConstructor
 @Service
-public class ProdutoCategoriaService {
+public class ProdutoService {
    
-    private final CategoriaRepository categoriaRepository;
     private final UsuarioService usuarioService;
     private final ProdutoRepository produtoRepository;
 
@@ -40,11 +37,6 @@ public class ProdutoCategoriaService {
         String code = "CP" + name;
 
         produto.setCode(code);
-
-        Optional<Categoria> categoria = categoriaRepository.findById(produtoPayloadDto.getCategoriaId());
-
-        Categoria c = categoria.get();
-        produto.setCategoria(c);
 
         return produto;
     }
@@ -86,10 +78,6 @@ public class ProdutoCategoriaService {
 
             p.setCode(code);
 
-            Optional<Categoria> categoria = categoriaRepository.findById(produtoPayloadDto.getCategoriaId());
-
-            Categoria c = categoria.get();
-            p.setCategoria(c);
         } else if (usuarioPayloadDto.getGrupo().equals("ESTOQUISTA")) {
             p.setQtdEstoque(produtoPayloadDto.getQtdEstoque());
         }

@@ -17,6 +17,5 @@ public class ProdutoPayloadDto {
     private double preco;
     private int qtdEstoque;
     private List<String> imagesPath;
-    private Long categoriaId;
     private boolean status;
 }

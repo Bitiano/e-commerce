@@ -1,6 +1,5 @@
 package senac.pi.ecommerce.backend.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -18,52 +17,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import lombok.AllArgsConstructor;
-import senac.pi.ecommerce.backend.models.Categoria;
-import senac.pi.ecommerce.backend.models.CategoriaDto;
 import senac.pi.ecommerce.backend.models.Produto;
 import senac.pi.ecommerce.backend.models.ProdutoDto;
 import senac.pi.ecommerce.backend.models.ProdutoPayloadDto;
 import senac.pi.ecommerce.backend.models.UsuarioPayloadDto;
-import senac.pi.ecommerce.backend.repository.CategoriaRepository;
 import senac.pi.ecommerce.backend.repository.ProdutoRepository;
-import senac.pi.ecommerce.backend.services.ProdutoCategoriaService;
+import senac.pi.ecommerce.backend.services.ProdutoService;
 import senac.pi.ecommerce.backend.services.UsuarioService;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/")
-public class ProdutoCategoriaController {
+public class ProdutoController {
     private final ProdutoRepository produtoRepository;
-    private final CategoriaRepository categoriaRepository;
-    private final ProdutoCategoriaService produtoCategoriaService;
+    private final ProdutoService produtoCategoriaService;
     private final UsuarioService usuarioService;
 
-    @PostMapping("categoria/incluiCategoria")
-    public ResponseEntity<String> incluiCategoria(@RequestBody Categoria categoria, @RequestParam String token) {
-        UsuarioPayloadDto u = usuarioService.verificarUsuarioPorToken(token);
-        if(u.getGrupo().equals("ADMIN")) {
-            categoriaRepository.save(categoria);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Apenas administradores podem criar categorias", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    @GetMapping("categoria/listaCategorias")
-    public List<Categoria> listaCategorias() {
-       return categoriaRepository.findAllCategoriasWithFilteredProducts();
-    }
-
-    @GetMapping("categoria/listaCategoria/{idCategoria}")
-    public Optional<Categoria> listaCategoria(@PathVariable Long idCategoria) {
-        Optional<Categoria> categoria = categoriaRepository.findById(idCategoria);
-
-        if(!categoria.isEmpty()) {
-            return categoria;
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nao existe esta categoria");
-        }
-    }
 
     @PostMapping("produto/incluiProduto")
     public ResponseEntity<String> incluiProduto(@RequestParam String token, @RequestBody ProdutoPayloadDto produto) {
@@ -121,10 +90,5 @@ public class ProdutoCategoriaController {
         }else{
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Problema ao listar produtos");
         }
-    }
-
-    @GetMapping("categoria/buscaCategoriasSemProduto")
-    public List<CategoriaDto> listaCategoriasSemProdutos() {
-        return categoriaRepository.findAllCategoriesWithoutProducts();
     }
 }
