@@ -1,60 +1,73 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', async function () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '../index.html';
+        return;
+    }
+
+    const productList = document.getElementById('product-list');
     const searchInput = document.getElementById('search');
-    const productTableBody = document.querySelector('#productTable tbody');
 
-    async function fetchProducts(query = '') {
+    async function fetchProducts(nomeFiltro = '') {
         try {
-            const response = await fetch(`http://localhost:8080/produto/buscaProdutos/?nomeFiltro=${query}`);
-            const produtos = await response.json();
-
-            productTableBody.innerHTML = '';
-
-            produtos.produtos.forEach(produto => {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${produto.id}</td>
-                    <td>${produto.nome}</td>
-                    <td>${produto.quantidade}</td>
-                    <td>${produto.preco}</td>
-                    <td>${produto.ativo ? 'Ativo' : 'Inativo'}</td>
-                    <td>
-                        <button onclick="alterarProduto(${produto.id})">Alterar</button>
-                        <button onclick="inativarProduto(${produto.id})">Inativar</button>
-                        <button onclick="visualizarProduto(${produto.id})">Visualizar</button>
-                    </td>
-                `;
-
-                productTableBody.appendChild(row);
+            const response = await fetch(`http://localhost:8080/produto/buscaProdutos?nomeFiltro=${nomeFiltro}&token=${token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+
+            if (response.ok) {
+                const products = await response.json();
+                return products;
+            } else {
+                document.getElementById('message').textContent = `Erro ao buscar produtos`;
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').style.marginBottom = '10px';
+                return [];
+            }
         } catch (error) {
-            console.error('Erro ao buscar produtos:', error);
+            document.getElementById('message').textContent = `Erro ao buscar produtos`;
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').style.marginBottom = '10px';
+            return [];
         }
     }
 
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value;
-        fetchProducts(query);
+    function renderProductList(products) {
+        productList.innerHTML = '';
+        products.forEach(product => {
+            console.log(product);
+            const productRow = document.createElement('tr');
+            productRow.innerHTML = `
+                <td>${product.code}</td>
+                <td>${product.nome}</td>
+                <td>${product.qtdEstoque}</td>
+                <td>R$${product.preco}</td>
+                <td>${product.status ? 'Ativo' : 'Inativo'}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editProduct(${product.id})">Editar</button>
+                    <button class="btn btn-view" onclick="viewProduct(${product.id})">Visualizar</button>
+                    <button class="btn btn-toggle-status" onclick="toggleProductStatus(${product.id})">${product.status ? 'Desativar' : 'Ativar'}</button>
+                </td>
+            `;
+            productList.appendChild(productRow);
+        });
+    }
+
+    async function loadProducts() {
+        const nomeFiltro = searchInput.value;
+        const products = await fetchProducts(nomeFiltro);
+        renderProductList(products.produtos);
+    }
+
+    searchInput.addEventListener('input', () => {
+        loadProducts();
     });
 
-    fetchProducts();
+    loadProducts();
 });
 
-function editarProduto(id) {
-   
-}
-
-function inativarProduto(id) {
-}    
-
-function visualizarProduto(id) {
-    // const modal = document.getElementById('modal');
-    // const modalContent = document.getElementById('modalContent');
-
-    // modalContent.innerHTML = `
-    //     <h2>Produto ${id}</h2>
-    //     <p>Descrição do produto ${id}</p>
-    // `;
-
-    // modal.style.display = 'block';
+function editProduct(productId) {
+    window.location.href = `edit-product.html?id=${productId}`;
 }
