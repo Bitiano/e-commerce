@@ -1,53 +1,68 @@
-import { createEditForm } from "./editProduct.js";
+import { createEditForm } from './editProduct.js';
 
-const editForm = createEditForm();
-const formContainer = document.getElementById("form-container");
+document.addEventListener('DOMContentLoaded', function () {
+    const container = document.querySelector('#form-container');
+    const form = createEditForm();
+    container.appendChild(form);
+    const messageElement = document.querySelector('#message');
 
-formContainer.appendChild(editForm);
+    const token = localStorage.getItem('token');
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const formContainer = document.getElementById("form-container");
-//     const product = JSON.parse(localStorage.getItem("product"));
-//     const editForm = createEditForm(product);
-    
-//     formContainer.appendChild(editForm);
-    
-//     editForm.addEventListener("submit", async (event) => {
-//         event.preventDefault();
-    
-//         const formData = new FormData();
-//         formData.append("nome", document.getElementById("nome").value);
-//         formData.append("avaliacao", document.getElementById("avaliacao").value);
-//         formData.append("descricao", document.getElementById("descricao").value);
-//         formData.append("preco", document.getElementById("preco").value);
-//         formData.append("qtdEstoque", document.getElementById("qtdEstoque").value);
-//         formData.append("status", document.getElementById("status").value);
-    
-//         const images = document.getElementById("images").files;
-//         for (let i = 0; i < images.length; i++) {
-//         formData.append("imagesPath", images[i]);
-//         }
-    
-//         const token = localStorage.getItem("token");
-    
-//         try {
-//         const response = await fetch(
-//             `http://localhost:8080/produto/atualizaProduto?idProduto=${product.id}&token=${token}`,
-//             {
-//             method: "PUT",
-//             body: formData,
-//             }
-//         );
-    
-//         if (response.ok) {
-//             alert("Produto atualizado com sucesso");
-//             window.location.href = "./products-list.html";
-//         } else {
-//             const errorData = await response.json();
-//             alert(`Erro ao atualizar produto: ${errorData.message}`);
-//         }
-//         } catch (error) {
-//         alert(`Erro ao atualizar produto: ${error.message}`);
-//         }
-//     });
-// });
+    if (!token) {
+        window.location.href = '../index.html';
+        return;
+    }
+
+    async function fetchProductDetails() {
+        try {
+            const response = await fetch(`http://localhost:8080/produto/listaProduto/${productId}`);
+            if (response.ok) {
+                const product = await response.json();
+                populateForm(product);
+            } else {
+                messageElement.textContent = 'Erro ao carregar detalhes do produto';
+                messageElement.style.color = 'red';
+            }
+        } catch (error) {
+            messageElement.textContent = 'Erro ao carregar detalhes do produto';
+            messageElement.style.color = 'red';
+        }
+    }
+
+    function populateForm(product) {
+        document.getElementById('nome').value = product.nome;
+        document.getElementById('avaliacao').value = product.avaliacao;
+        document.getElementById('descricao').value = product.descricao;
+        document.getElementById('preco').value = product.preco;
+        document.getElementById('qtdEstoque').value = product.qtdEstoque;
+        document.getElementById('status').value = product.status;
+    }
+
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(`http://localhost:8080/produto/atualizaProduto/${productId}?token=${token}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            if (response.ok) {
+                messageElement.textContent = 'Produto atualizado com sucesso!';
+                messageElement.style.color = 'green';
+            } else {
+                messageElement.textContent = 'Erro ao atualizar produto';
+                messageElement.style.color = 'red';
+            }
+        } catch (error) {
+            messageElement.textContent = 'Erro ao atualizar produto';
+            messageElement.style.color = 'red';
+        }
+    });
+
+    fetchProductDetails();
+});

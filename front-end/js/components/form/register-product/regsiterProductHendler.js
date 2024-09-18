@@ -1,48 +1,43 @@
-import { createProductForm } from "./registerProduct.js";
+import { createProductForm } from './registerProduct.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const formContainer = document.getElementById("form-container");
-  const productForm = createProductForm();
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.querySelector('#form-container');
+  const form = createProductForm();
+  container.appendChild(form);
 
-  formContainer.appendChild(productForm);
+  const messageElement = document.createElement('div');
+  messageElement.id = 'message';
+  container.appendChild(messageElement);
 
-  productForm.addEventListener("submit", async (event) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = '../index.html';
+    return;
+  }
+
+  form.addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("nome", document.getElementById("nome").value);
-    formData.append("avaliacao", document.getElementById("avaliacao").value);
-    formData.append("descricao", document.getElementById("descricao").value);
-    formData.append("preco", document.getElementById("preco").value);
-    formData.append("qtdEstoque", document.getElementById("qtdEstoque").value);
-    formData.append("status", document.getElementById("status").value);
-
-    const images = document.getElementById("images").files;
-    for (let i = 0; i < images.length; i++) {
-      formData.append("imagesPath", images[i]);
-    }
-
-    const token = localStorage.getItem("token");
+    const formData = new FormData(form);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/produto/incluiProduto?token=${token}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`http://localhost:8080/produto/incluiProduto?token=${token}`, {
+        method: 'POST',
+        body: formData
+      });
 
       if (response.ok) {
-        alert("Produto cadastrado com sucesso");
-        productForm.reset();
-        window.location.href = "./products-list.html";
+        messageElement.textContent = 'Produto cadastrado com sucesso!';
+        messageElement.style.color = 'green';
+        form.reset();
       } else {
-        const errorData = await response.json();
-        alert(`Erro ao cadastrar produto: ${errorData.message}`);
+        messageElement.textContent = 'Erro ao cadastrar produto';
+        messageElement.style.color = 'red';
       }
     } catch (error) {
-      alert(`Erro ao cadastrar produto: ${error.message}`);
+      messageElement.textContent = 'Erro ao cadastrar produto';
+      messageElement.style.color = 'red';
     }
   });
 });
