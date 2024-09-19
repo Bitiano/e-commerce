@@ -81,7 +81,7 @@ public class ProdutoController {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nao foi possivel atualizar o produto");
     }
 
-    @GetMapping("produto/buscaProdutos/")
+    @GetMapping("produto/buscaProdutos")
     public ProdutoDto buscaProdutos(@RequestParam(required = false) String nomeFiltro) {
         ProdutoDto u = produtoCategoriaService.buscaProdutos(nomeFiltro);
 
