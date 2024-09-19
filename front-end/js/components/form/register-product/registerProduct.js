@@ -1,7 +1,6 @@
-export const createProductForm = () => {
-    const form = document.createElement("form");
-    form.id = "product-form";
-    form.enctype = "multipart/form-data";
+export function createProductForm() {
+    const form = document.createElement('form');
+    form.id = 'product-form';
 
     form.innerHTML = `
         <div>
@@ -32,14 +31,6 @@ export const createProductForm = () => {
         <div>
             <label for="images">Imagens do Produto:</label>
             <input type="file" id="images" name="images" multiple required />
-        </div>
-        
-        <div>
-            <label for="status">Status:</label>
-            <select id="status" name="status" required>
-                <option value="true">Ativo</option>
-                <option value="false">Inativo</option>
-            </select>
         </div>
         
         <button type="submit">Cadastrar Produto</button>

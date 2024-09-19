@@ -16,15 +16,67 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
+  const imageUrls = [];
+
+  const handleImageClick = () => {
+    const inputElement = document.getElementById('images');
+    inputElement.click();
+  };
+
+  const handleUpload = async (image) => {
+    if (image) {
+      const formData = new FormData();
+      formData.append('key', '5d7b99eb4e0e934e0de6dbfce6cd0859');
+      formData.append('image', image);
+
+      try {
+        const response = await fetch('https://api.imgbb.com/1/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const imageUrl = data.data.url;
+          imageUrls.push(imageUrl);
+        } else {
+          console.error('Erro ao fazer upload da imagem');
+        }
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+      }
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    for (const file of files) {
+      handleUpload(file);
+    }
+  };
+
   form.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const formData = new FormData(form);
 
+    const productData = {
+      nome: formData.get('nome').trim(),
+      avaliacao: parseFloat(formData.get('avaliacao')),
+      descricao: formData.get('descricao').trim(),
+      preco: parseFloat(formData.get('preco')),
+      qtdEstoque: parseInt(formData.get('qtdEstoque')),
+      imagesPath: imageUrls,
+      status: true // Ajuste conforme necessário
+    };
+
     try {
       const response = await fetch(`http://localhost:8080/produto/incluiProduto?token=${token}`, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
       });
 
       if (response.ok) {
@@ -40,4 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
       messageElement.style.color = 'red';
     }
   });
+
+  document.getElementById('images').addEventListener('change', handleImageChange);
 });
