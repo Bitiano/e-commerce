@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="../css/pages/backoffice.css">
     <title>Yks | Backoffice</title>
 </head>
+
 <body>
     <header class="header"></header>
 
@@ -19,13 +21,25 @@
             </h1>
 
             <div class="box-btns" id="box-btns">
-                
             </div>
+
+            <button class="btn btn-logout" id="btn-logout">
+                Sair
+            </button>
+
         </section>
     </main>
 
-    
     <script src="../js/components/header/header.js"></script>
     <script src="../js/components/backoffice/backoffice.js"></script>
+
+    <script>
+        const btnLogout = document.getElementById('btn-logout');
+
+        btnLogout.addEventListener('click', () => {
+            window.location.href = '../index.html';
+        });
+    </script>
 </body>
+
 </html>
