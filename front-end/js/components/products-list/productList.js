@@ -14,6 +14,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     const modalContent = document.getElementById('product-preview-content');
     const closeModal = document.getElementsByClassName('close')[0];
 
+    const currentPageDisplay = document.getElementById('currentPageDisplay');
+    const prevPageButton = document.getElementById('prevPageButton');
+    const nextPageButton = document.getElementById('nextPageButton');
+
+    let currentPage = 0;
+    let totalPages = 1;
+    const pageSize = 10;
+
     closeModal.onclick = function () {
         modal.style.display = 'none';
     }
@@ -24,9 +32,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    async function fetchProducts(nomeFiltro = '') {
+    async function fetchProducts(nomeFiltro = '', page = 0, size = pageSize) {
         try {
-            const response = await fetch(`http://localhost:8080/produto/buscaProdutos?nomeFiltro=${nomeFiltro}&token=${token}`, {
+            const response = await fetch(`http://localhost:8080/produto/buscaProdutos?nomeFiltro=${nomeFiltro}&page=${page}&size=${size}&token=${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,17 +42,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
 
             if (response.ok) {
-                const products = await response.json();
-                return products;
+                return await response.json();
             } else {
-                messageElement.textContent = `Erro ao buscar produtos`;
+                messageElement.textContent = 'Erro ao buscar produtos';
                 messageElement.style.color = 'red';
-                return [];
+                return { produtos: [], currentPage: 0, totalPages: 1 };
             }
         } catch (error) {
-            messageElement.textContent = `Erro ao buscar produtos`;
+            messageElement.textContent = 'Erro ao buscar produtos';
             messageElement.style.color = 'red';
-            return [];
+            return { produtos: [], currentPage: 0, totalPages: 1 };
         }
     }
 
@@ -188,11 +195,37 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function loadProducts() {
         const nomeFiltro = searchInput.value;
-        const products = await fetchProducts(nomeFiltro);
-        renderProductList(products.produtos);
+        const productsData = await fetchProducts(nomeFiltro, currentPage);
+        
+        if (productsData) {
+            renderProductList(productsData.produtos);
+            totalPages = productsData.totalPage;
+            updatePaginationControls();
+        }
     }
 
+    function updatePaginationControls() {
+        currentPageDisplay.textContent = `Página ${currentPage + 1} de ${totalPages}`;
+        prevPageButton.disabled = currentPage === 0;
+        nextPageButton.disabled = currentPage >= totalPages - 1;
+    }
+
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            loadProducts();
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            loadProducts();
+        }
+    });
+
     searchInput.addEventListener('input', () => {
+        currentPage = 0;
         loadProducts();
     });
 

@@ -82,12 +82,16 @@ public class ProdutoController {
     }
 
     @GetMapping("produto/buscaProdutos")
-    public ProdutoDto buscaProdutos(@RequestParam(required = false) String nomeFiltro) {
-        ProdutoDto u = produtoCategoriaService.buscaProdutos(nomeFiltro);
+    public ProdutoDto buscaProdutos(
+        @RequestParam(required = false) String nomeFiltro,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        ProdutoDto u = produtoCategoriaService.buscaProdutos(nomeFiltro, page, size);
 
-        if(u != null) {
+        if (u != null) {
             return u;
-        }else{
+        } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Problema ao listar produtos");
         }
     }

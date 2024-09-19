@@ -13,4 +13,6 @@ import lombok.Setter;
 public class ProdutoDto {
     private List<Produto> produtos;
     private long qtdTotal;
+    private int totalPage;
+    private int page;
 }

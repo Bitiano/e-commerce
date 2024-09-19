@@ -3,6 +3,9 @@ package senac.pi.ecommerce.backend.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -85,19 +88,21 @@ public class ProdutoService {
         return p;
     }
 
-    public ProdutoDto buscaProdutos(String nomeFiltro) {
-        List<Produto> produtos;
-        long qtdTotal;
-
+    public ProdutoDto buscaProdutos(String nomeFiltro, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Produto> produtoPage;
+    
         if (nomeFiltro != null && !nomeFiltro.isEmpty()) {
-            produtos = produtoRepository.buscarProdutos(nomeFiltro);
-            qtdTotal = produtoRepository.contarProdutos(nomeFiltro);
+            produtoPage = produtoRepository.buscarProdutos(nomeFiltro, pageable);
         } else {
-            produtos = produtoRepository.findAll();
-            qtdTotal = produtoRepository.count();
+            produtoPage = produtoRepository.findAll(pageable);
         }
-        
-        return new ProdutoDto(produtos, qtdTotal);
+    
+        long qtdTotal = produtoPage.getTotalElements();
+        int totalPages = produtoPage.getTotalPages();
+        List<Produto> produtos = produtoPage.getContent();
+    
+        return new ProdutoDto(produtos, qtdTotal, totalPages, page);
     }
 
     public Produto buscaProduto(String token, long id) {

@@ -20,8 +20,8 @@
                 <h1>Lista de Produtos</h1>
 
                 <div class="row">
-                    <button class="btn" onclick=backToHome()>
-                        voltar
+                    <button class="btn" onclick="backToHome()">
+                        Voltar
                     </button>
                 </div>
                 
@@ -48,6 +48,11 @@
                     <tbody id="product-list">
                     </tbody>
                 </table>
+                <div class="pagination-controls">
+                    <button id="prevPageButton" class="btn">Anterior</button>
+                    <span id="currentPageDisplay">Página 1 de 1</span>
+                    <button id="nextPageButton" class="btn">Próximo</button>
+                </div>
             </div>
 
             <div id="product-preview-modal" class="modal">
@@ -55,8 +60,7 @@
                     <div class="modal-header">
                         Preview do Produto<span class="close">&times;</span> 
                     </div>
-                    <div id="product-preview-content">
-                    </div>
+                    <div id="product-preview-content"></div>
                 </div>
             </div>
         </section>
