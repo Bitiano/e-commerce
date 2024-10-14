@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/global/reset.css">
+    <link rel="stylesheet" href="../css/global/styles.css">
+    <link rel="stylesheet" href="../css/pages/update-client.css">
+    <title>Alterar Dados do Cliente</title>
+</head>
+
+<body>
+    <header class="header">
+    </header>
+
+    <a href="#" id="logout-button">Logout</a>
+
+    <main>
+        <section class="update-form">
+            <h1>Alterar Dados do Cliente</h1>
+            <form id="update-form">
+                <div class="form-group">
+                    <label for="nomeCompleto">Nome Completo</label>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataNascimento">Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" required>
+                </div>  
+                <div class="form-group">
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero" required>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="O">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha">
+                </div>
+                <button type="submit" class="btn btn-update">Atualizar</button>
+            </form>
+            <h2>Adicionar Novo Endereço</h2>
+            <form id="add-address-form">
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" required>
+                </div>
+                <div class="form-group">
+                    <label for="logradouro">Logradouro</label>
+                    <input type="text" id="logradouro" name="logradouro" required>
+                </div>
+                <div class="form-group">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" name="numero" required>
+                </div>
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" required>
+                </div>
+                <div class="form-group">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade" required>
+                </div>
+                <div class="form-group">
+                    <label for="uf">UF</label>
+                    <input type="text" id="uf" name="uf" required>
+                </div>
+                <button type="submit" class="btn btn-add-address">Adicionar Endereço</button>
+            </form>
+            <h2>Endereços de Entrega</h2>
+            <ul id="address-list"></ul>
+        </section>
+    </main>
+
+    <script src="../js/components/header/header.js"></script>
+    <script type="module" src="../js/components/update-client/update-client.js"></script>
+    <script src="../js/components/logout/logout.js"></script>
+</body>
+
+</html>

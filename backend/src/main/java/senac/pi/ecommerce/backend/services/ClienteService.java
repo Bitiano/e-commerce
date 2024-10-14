@@ -102,7 +102,7 @@ public class ClienteService {
         Optional<Cliente> clienteById = clienteRepository.findById(clienteToken.getId());
         Cliente c = clienteById.get();
 
-        if(!clienteToken.getEmail().equals(cliente.getEmail())) {
+        if(!clienteToken.getEmail().equals(c.getEmail())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Você não pode alterar este cliente");
         }
 
