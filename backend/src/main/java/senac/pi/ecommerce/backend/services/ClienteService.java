@@ -278,7 +278,7 @@ public class ClienteService {
         List<Endereco> enderecos = buscaEnderecosPorCliente(token);
 
         for (Endereco endereco : enderecos) {
-            if(endereco.getId() == enderecoId && endereco.isEnderecoFaturamento() == false) {
+            if(endereco.getId() == enderecoId && endereco.isPrincipal() == false) {
                 endereco.setPrincipal(true);
             } else {
                 endereco.setPrincipal(false);

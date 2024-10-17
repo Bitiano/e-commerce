@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addAddressForm = document.getElementById('add-address-form');
     const addressList = document.getElementById('address-list');
     const emailInput = document.getElementById('email');
+    const cepInput = document.getElementById('cep');
+    const logradouroInput = document.getElementById('logradouro');
+    const numeroInput = document.getElementById('numero');
+    const bairroInput = document.getElementById('bairro');
+    const cidadeInput = document.getElementById('cidade');
+    const ufInput = document.getElementById('uf');
 
     const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:8080/cliente/buscaClienteByToken/token/${token}`);
@@ -19,37 +25,60 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addressResponse = await fetch(`http://localhost:8080/endereco/buscaEnderecosPorCliente/token/${token}`);
     if (addressResponse.ok) {
         const enderecos = await addressResponse.json();
-        console.log(enderecos);
-        addressList.innerHTML = ''; // Limpar a lista antes de renderizar
+        addressList.innerHTML = ''; 
         enderecos.forEach(endereco => {
-            console.log(endereco);
             const li = document.createElement('li');
             li.textContent = `${endereco.logradouro}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade} - ${endereco.uf}`;
-            li.style.margin = '10px 0';
-            li.style.padding = '10px';
-            li.style.border = '1px solid #ccc';
-            li.style.borderRadius = '5px';
-            li.style.width = 'fit-content';
-            const button = document.createElement('button');
-            button.textContent = 'Definir como Padrão';
-            button.style.marginLeft = '15px';
-            button.addEventListener('click', async () => {
-                const response = await fetch(`http://localhost:8080/endereco/atualizaPrincipal/idEndereco/${endereco.id}/token/${token}`, {
-                    method: 'PUT'
-                });
-                if (response.ok) {
-                    alert('Endereço definido como padrão com sucesso!');
-                    window.location.reload();
-                } else {
-                    alert('Erro ao definir endereço como padrão!');
+            li.style.margin='1rem auto';
+            li.style.padding='.7rem 0';
+            li.style.border='1px solid #ccc';
+            li.style.borderRadius='5px';
+            li.style.maxWidth='650px';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = endereco.principal;
+            checkbox.style.marginLeft = '15px';
+            checkbox.addEventListener('change', async () => {
+                if (checkbox.checked) {
+                    const response = await fetch(`http://localhost:8080/endereco/atualizaPrincipal/idEndereco/${endereco.id}/token/${token}`, {
+                        method: 'PUT'
+                    });
+                    if (response.ok) {
+                        alert('Endereço definido como padrão com sucesso!');
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao definir endereço como padrão!');
+                    }
                 }
             });
-            li.appendChild(button);
+
+            li.appendChild(checkbox);
             addressList.appendChild(li);
         });
     } else {
         alert('Erro ao buscar endereços do cliente!');
     }
+
+    cepInput.addEventListener('blur', async () => {
+        const cep = cepInput.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            if (response.ok) {
+                const data = await response.json();
+                if (!data.erro) {
+                    logradouroInput.value = data.logradouro;
+                    bairroInput.value = data.bairro;
+                    cidadeInput.value = data.localidade;
+                    ufInput.value = data.uf;
+                } else {
+                    alert('CEP não encontrado!');
+                }
+            } else {
+                alert('Erro ao buscar CEP!');
+            }
+        }
+    });
 
     updateForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -89,9 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bairro: formData.get('bairro'),
             cidade: formData.get('cidade'),
             uf: formData.get('uf'),
-            enderecoFaturamento: false,
-            ativo: true,
-            principal: false
+            ativo: true
         };
 
         const response = await fetch(`http://localhost:8080/endereco/adicionaEndereco/token/${token}`, {

@@ -19,10 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
+            localStorage.removeItem('userType');
             const token = await response.text();
             localStorage.setItem('token', token);
             alert('Login realizado com sucesso!');
-            window.location.href = 'edit-client.html';
+            window.location.href = 'products-view.html';
         } else {
             alert('Erro ao realizar login! Verifique suas credenciais.');
         }

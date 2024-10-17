@@ -1,8 +1,10 @@
-.heading-2 {
-    background-color: #2a2c4c;
-    padding: .8rem 2rem;
-    display: flex;
-    justify-content: end;
+main {
+    padding: 0 2rem;
+}
+h1 {
+    font-size: 1.8em;
+    margin: 20px 0;
+    text-align: center;
 }
 
 .cart-items {
@@ -83,6 +85,8 @@
 
 .freight-calculation {
     margin-top: 20px;
+    max-width: 400px;
+    margin-left: auto;
 }
 
 .freight-calculation h2 {
@@ -119,4 +123,26 @@
     margin-top: 10px;
     font-size: 1em;
     color: #333;
+}
+
+#freight-options {
+    margin-top: 10px;
+    max-width: 600px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.freight-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#cart-total {
+    font-size: 1.2em;
+    margin-top: 20px;
 }
