@@ -1,9 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const logoutButton = document.getElementById('logout-button');
+const logout = () => {
+    localStorage.removeItem('token');
+    location.href = 'login-client.html';
+}
 
-    logoutButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        localStorage.removeItem('token');
-        window.location.href = 'products-view.html';
-    });
-});
+export default logout;  

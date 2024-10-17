@@ -56,76 +56,64 @@ function renderCartItems() {
     updateSubtotal();
 }
 
+async function obterEndereco(cep) {
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.erro) {
+            throw new Error('CEP não encontrado');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Erro ao obter endereço:', error);
+        return null;
+    }
+}
+
+function renderFreightOptions(endereco) {
+    const freightOptionsContainer = document.getElementById('freight-options');
+    freightOptionsContainer.innerHTML = `
+        <h3>Opções de Frete para ${endereco.logradouro}, ${endereco.uf}</h3>
+        <div class="freight-option">
+            <input type="radio" id="frete-padrao" name="frete" value="5">
+            <label for="frete-padrao">Entrega padrão (5 a 7 dias úteis) - R$5,00</label>
+        </div>
+        <div class="freight-option">
+            <input type="radio" id="frete-express" name="frete" value="14">
+            <label for="frete-express">Entrega expressa (1 a 3 dias úteis) - R$14,00</label>
+        </div>
+        <div class="freight-option">
+            <input type="radio" id="frete-rapido" name="frete" value="9">
+            <label for="frete-rapido">Entrega rápida (4 a 5 dias úteis) - R$9,00</label>
+        </div>
+    `;
+
+    const freightOptions = document.getElementsByName('frete');
+    freightOptions.forEach(option => {
+        option.addEventListener('change', updateTotal);
+    });
+}
+
 function updateSubtotal() {
     const cartSubtotalElement = document.getElementById('cart-subtotal');
     const cart = getCart();
     const subtotal = cart.reduce((acc, item) => acc + item.preco * item.quantity, 0);
     cartSubtotalElement.textContent = `Subtotal: R$${subtotal.toFixed(2)}`;
+    updateTotal();
 }
 
-async function obterCoordenadas(cep) {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${cep}`;
-    
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0',
-            }
-        });
-        const data = await response.json();
-
-        if (data.length > 0) {
-            const lat = parseFloat(data[0].lat);
-            const lon = parseFloat(data[0].lon);
-            return { lat, lon };
-        } else {
-            throw new Error('CEP não encontrado');
-        }
-    } catch (error) {
-        console.error('Erro ao obter coordenadas:', error);
-        return null;
-    }
-}
-
-function calcularDistanciaHaversine(coord1, coord2) {
-    const raioTerraKm = 6371
-    const dLat = toRad(coord2.lat - coord1.lat);
-    const dLon = toRad(coord2.lon - coord1.lon);
-    const lat1 = toRad(coord1.lat);
-    const lat2 = toRad(coord2.lat);
-
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2); 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
-    return raioTerraKm * c;
-}
-
-function toRad(value) {
-    return value * Math.PI / 180;
-}
-
-async function calculaFrete(cepDestino) {
-    const cepOrigem = '04696-000';
-
-    try {
-        const coordOrigem = await obterCoordenadas(cepOrigem);
-        const coordDestino = await obterCoordenadas(cepDestino);
-
-        if (!coordOrigem || !coordDestino) {
-            console.log('Não foi possível calcular a distância.');
-            return 0;
-        }
-
-        const distancia = calcularDistanciaHaversine(coordOrigem, coordDestino);
-        console.log(`Distância: ${distancia.toFixed(2)} km`);
-
-        const valorFrete = 5.00 * distancia;
-        return valorFrete;
-    } catch (error) {
-        console.error('Erro ao calcular o frete:', error);
-        return 0;
-    }
+function updateTotal() {
+    const cart = getCart();
+    const subtotal = cart.reduce((acc, item) => acc + item.preco * item.quantity, 0);
+    const selectedFreight = document.querySelector('input[name="frete"]:checked');
+    const freightCost = selectedFreight ? parseFloat(selectedFreight.value) : 0;
+    const total = subtotal + freightCost;
+    const cartTotalElement = document.getElementById('cart-total');
+    cartTotalElement.textContent = `Total: R$${total.toFixed(2)}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -172,8 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
     freightForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const cep = document.getElementById('cep-input').value;
-        const freight = await calculaFrete(cep);
-        freightResult.textContent = `Frete: R$${freight.toFixed(2)}`;
+        const endereco = await obterEndereco(cep);
+
+        if (endereco) {
+            freightResult.textContent = '';
+            renderFreightOptions(endereco);
+        } else {
+            freightResult.textContent = 'CEP inválido. Por favor, tente novamente.';
+        }
     });
 
     checkoutButton.addEventListener('click', () => {
