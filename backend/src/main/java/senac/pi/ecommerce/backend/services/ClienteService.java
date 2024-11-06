@@ -33,7 +33,7 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final EnderecoRepository enderecoRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private static final String CHAVE_SECRETA = "jwt-geekOpolis-validation";
+    private static final String CHAVE_SECRETA = "jwt-yks-validation";
 
     public boolean salvaCliente(Cliente cliente) {
         if(clienteRepository.findByEmail(cliente.getEmail()) != null) {
