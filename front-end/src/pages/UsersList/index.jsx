@@ -19,7 +19,7 @@ export const UsersList = () => {
 
     return (
         <Container>
-            <h1>Lista de Usuarios</h1>
+            <h1 style={{ textAlign: 'center', marginTop: '5rem' }}>Lista de Usuarios</h1>
             <SearchInput
                 value={searchTerm}
                 onChange={handleSearchChange}

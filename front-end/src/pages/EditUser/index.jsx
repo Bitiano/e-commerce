@@ -7,7 +7,6 @@ export const EditUser = () => {
 
     return (
         <Container>
-            <h1>Editar Usuario</h1>
             <UserForm userId={id} />
         </Container>
     );

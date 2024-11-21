@@ -7,16 +7,19 @@ import { Backoffice } from '../../pages/Backoffice';
 import { ProductsList } from '../../pages/ProductsList';
 import { RegisterProduct } from '../../pages/RegisterProduct';
 import { EditProduct } from '../../pages/EditProduct';
+import { OrdersList } from '../../pages/OrdersList';
 import { UsersList } from '../../pages/UsersList';
 import { RegisterUser } from '../../pages/RegisterUser';
 import { EditUser } from '../../pages/EditUser';
 import { ProductDetails } from '../../pages/ProductDetails';
 import { Cart } from '../../pages/Cart';
 import { Checkout } from '../../pages/Checkout';
-import { OrdersClientList } from '../../pages/OrdersClientList';
+import { ClientOrdersList } from '../../pages/ClientOrdersList';
+import { ClientOrderDetails } from '../../pages/ClientOrderDeatails';
 import { ProfileClient } from '../../pages/ProfileClient';
 import { EditClient } from '../../pages/EditClient';
 import { AddressClientList } from '../../pages/AddressClientList';
+import { Error404 } from '../../pages/Error404';
 
 import { AuthProvider } from '../../contexts/AuthContext';
 import { ProtectedRoute } from '../../components/Auth/ProtectedRoute';
@@ -33,8 +36,10 @@ export const AppRoutes = () => {
                 <Route path="/register" element={<RegisterClient />} />
                 <Route path="/profile" element={<ProfileClient />} />
                 <Route path="/profile/edit" element={<EditClient />} />
-                <Route path="/profile/orders-list" element={<OrdersClientList />} />
+                <Route path="/profile/orders-list" element={<ClientOrdersList />} />
+                <Route path="/profile/order-details/:id" element={<ClientOrderDetails />} />
                 <Route path="/profile/address-list" element={<AddressClientList />} />
+
                 <Route path="/backoffice" element={
                     <ProtectedRoute allowedRoles={['ADMIN', 'ESTOQUISTA']}>
                         <Backoffice />
@@ -70,6 +75,13 @@ export const AppRoutes = () => {
                         <EditUser />
                     </ProtectedRoute>
                 } />
+                <Route path='backoffice/orders-list' element={
+                    <ProtectedRoute allowedRoles={['ESTOQUISTA']}>
+                        <OrdersList />
+                    </ProtectedRoute>
+                } />
+  
+                <Route path="*" element={<Error404 />} />
             </Routes>
         </AuthProvider>
     );

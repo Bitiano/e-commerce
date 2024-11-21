@@ -41,9 +41,5 @@ export const Card = styled.div`
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
-
-        &:hover {
-            background-color: darken(var(--accent-color), 10%);
-        }
     }
 `;

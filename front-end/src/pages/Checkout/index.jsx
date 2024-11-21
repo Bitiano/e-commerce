@@ -87,47 +87,47 @@ export const Checkout = () => {
     };
 
     const handleConfirmOrder = async () => {
-        if (!enderecoSelecionado || !formaPagamento || !freight) {
-            alert('Por favor, selecione um endereço de entrega, uma forma de pagamento e uma opção de frete.');
-            return;
-        }
+    if (!enderecoSelecionado || !formaPagamento || !freight) {
+        alert('Por favor, selecione um endereço de entrega, uma forma de pagamento e uma opção de frete.');
+        return;
+    }
 
-        const token = localStorage.getItem('token');
-        const produtos = cart.map(item => ({
-            produto: {
-                nome: item.nome,
-                preco: item.preco,
-                img: item.imagesPath[0]
-            },
-            quantidade: item.quantity
-        }));
+    const token = localStorage.getItem('token');
+    const produtos = cart.map(item => ({
+        produto: {
+            nome: item.nome,
+            preco: item.preco,
+            img: item.imagesPath[0]
+        },
+        quantidade: item.quantity
+    }));
 
-        const totalProdutos = cart.reduce((total, item) => total + item.preco * item.quantity, 0);
-        const totalFrete = freight.price;
-        const totalPedido = totalProdutos + totalFrete;
+    const totalProdutos = cart.reduce((total, item) => total + item.preco * item.quantity, 0);
+    const totalFrete = freight.price;
+    const totalPedido = totalProdutos + totalFrete;
 
-        const pedidoDto = {
-            enderecoId: enderecoSelecionado.id,
-            formaPagamento,
-            produtos,
-            frete: {
-                tipo: freight.label,
-                valor: freight.price
-            },
-            total: totalPedido
-        };
-
-        try {
-            const response = await incluiPedido(token, pedidoDto);
-            setOrderNumber(response);
-            setFase(4);
-            clearCart();
-            alert('Pedido criado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao criar pedido:', error);
-            alert('Erro ao criar pedido!');
-        }
+    const pedidoDto = {
+        enderecoId: enderecoSelecionado.id,
+        metodoDePagamento: formaPagamento, 
+        produtos,
+        frete: {
+            tipo: freight.label,
+            valor: freight.price
+        },
+        total: totalPedido
     };
+
+    try {
+        const response = await incluiPedido(token, pedidoDto);
+        setOrderNumber(response);
+        setFase(4);
+        clearCart();
+        alert('Pedido criado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao criar pedido:', error);
+        alert('Erro ao criar pedido!');
+    }
+};
 
     const handleBack = () => {
         setFase(fase - 1);

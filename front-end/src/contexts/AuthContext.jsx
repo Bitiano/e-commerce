@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
                 buscaClientePorToken(token)
                     .then((cliente) => {
                         setUser({ ...cliente, type: 'cliente' });
+
                     })
                     .catch(() => setUser(null))
                     .finally(() => setLoading(false));

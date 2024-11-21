@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
 import { buscaUsuarios, atualizaStatusUsuario } from "../../../services/api/userAPI";
 import { AuthContext } from '../../../contexts/AuthContext';
+import { Table, TableHeader, TableRow, TableData, Button, PaginationWrapper, PageButton } from './styles';
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 export const UserList = ({ searchTerm, searchTrigger }) => {
@@ -69,44 +70,44 @@ export const UserList = ({ searchTerm, searchTrigger }) => {
 
     return (
         <>
-            <table>
+            <Table>
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Grupo</th>
-                        <th>Opções</th>
+                        <TableHeader>Nome</TableHeader>
+                        <TableHeader>Email</TableHeader>
+                        <TableHeader>Status</TableHeader>
+                        <TableHeader>Grupo</TableHeader>
+                        <TableHeader>Opções</TableHeader>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.id}>
-                            <td>{user.nome}</td>
-                            <td>{user.email}</td>
-                            <td>{user.ativo ? 'Ativo' : 'Inativo'}</td>
-                            <td>{user.grupo}</td>
-                            <td>
+                        <TableRow key={user.id}>
+                            <TableData>{user.nome}</TableData>
+                            <TableData>{user.email}</TableData>
+                            <TableData>{user.ativo ? 'Ativo' : 'Inativo'}</TableData>
+                            <TableData>{user.grupo}</TableData>
+                            <TableData>
                                 {currentUser.id !== user.id && (
                                     <>
-                                        <button>
+                                        <Button>
                                             <Link to={`/backoffice/edit-user/${user.id}`}>Editar</Link>
-                                        </button>
-                                        <button onClick={() => handleStatusChange(user.id, !user.ativo)}>
+                                        </Button>
+                                        <Button onClick={() => handleStatusChange(user.id, !user.ativo)}>
                                             {user.ativo ? 'Desativar' : 'Ativar'}
-                                        </button>
+                                        </Button>
                                     </>
                                 )}
-                            </td>
-                        </tr>
+                            </TableData>
+                        </TableRow>
                     ))}
                 </tbody>
-            </table>
-            <div>
-                <button onClick={handlePreviousPage} disabled={page === 0}>Anterior</button>
+            </Table>
+            <PaginationWrapper>
+                <PageButton onClick={handlePreviousPage} disabled={page === 0}>Anterior</PageButton>
                 <span>Página {page + 1} de {totalPages}</span>
-                <button onClick={handleNextPage} disabled={page === totalPages - 1}>Próxima</button>
-            </div>
+                <PageButton onClick={handleNextPage} disabled={page === totalPages - 1}>Próxima</PageButton>
+            </PaginationWrapper>
         </>
     );
 };

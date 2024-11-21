@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { registraUsuario, atualizaUsuario, buscaUsuarioPorId } from "../../../services/api/userAPI";
 import { cpfValidator } from "../../../utils/cpfValidator";
 import { AuthContext } from '../../../contexts/AuthContext';
+import { Form, Title } from './styles';
 import PropTypes from 'prop-types';
 
 export const UserForm = ({ userId }) => {
@@ -11,7 +12,7 @@ export const UserForm = ({ userId }) => {
     const [cpf, setCpf] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
-    const [grupo, setGrupo] = useState('');
+    const [grupo, setGrupo] = useState('ADMIN');
     const { user } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -81,73 +82,78 @@ export const UserForm = ({ userId }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="nome">Nome</label>
-                <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    value={nome}
-                    onChange={(event) => setNome(event.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    {...userId && { disabled: true }}   
-                />
-            </div>
-            <div>
-                <label htmlFor="cpf">CPF</label>
-                <input
-                    type="text"
-                    id="cpf"
-                    name="cpf"
-                    value={cpf}
-                    onChange={(event) => setCpf(event.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="senha">Senha</label>
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    value={senha}
-                    onChange={(event) => setSenha(event.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="confirmacaoSenha">Confirmação de Senha</label>
-                <input
-                    type="password"
-                    id="confirmacaoSenha"
-                    name="confirmacaoSenha"
-                    value={confirmacaoSenha}
-                    onChange={(event) => setConfirmacaoSenha(event.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="grupo">Grupo</label>
-                <select
-                    id="grupo"
-                    name="grupo"
-                    value={grupo}
-                    onChange={(event) => setGrupo(event.target.value)}
-                >
-                    <option value="ADMIN">Administrador</option>
-                    <option value="ESTOQUISTA">Estoquista</option>
-                </select>
-            </div>
-            <button type="submit">Enviar</button>
-            <button type="button" onClick={handleCancel}>Cancelar</button>
-        </form>
+        <>
+            <Title>{userId ? 'Editar Usuário' : 'Novo Usuário'}</Title>
+            <Form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="nome">Nome</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value={nome}
+                        onChange={(event) => setNome(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        {...userId && { disabled: true }}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="cpf">CPF</label>
+                    <input
+                        type="text"
+                        id="cpf"
+                        name="cpf"
+                        value={cpf}
+                        onChange={(event) => setCpf(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        value={senha}
+                        onChange={(event) => setSenha(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="confirmacaoSenha">Confirmação de Senha</label>
+                    <input
+                        type="password"
+                        id="confirmacaoSenha"
+                        name="confirmacaoSenha"
+                        value={confirmacaoSenha}
+                        onChange={(event) => setConfirmacaoSenha(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="grupo">Grupo</label>
+                    <select
+                        id="grupo"
+                        name="grupo"
+                        value={grupo}
+                        onChange={(event) =>
+                            setGrupo(event.target.value)
+                        }
+                    >
+                        <option value="ADMIN">Administrador</option>
+                        <option value="ESTOQUISTA">Estoquista</option>
+                    </select>
+                </div>
+                <button type="submit">Enviar</button>
+                <button type="button" onClick={handleCancel}>Cancelar</button>
+            </Form>
+        </>
     )
 };
 

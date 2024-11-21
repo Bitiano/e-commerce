@@ -1,10 +1,10 @@
 import { Container } from '../../components/Global/Container';
-import { UserForm } from '../../components/Forms/UserForm';
+import { List } from '../../components/Lists/OrdersList';
 
-export const RegisterUser = () => {
+export const OrdersList = () => {
     return (
         <Container>
-            <UserForm />
+            <List />
         </Container>
     );
 };

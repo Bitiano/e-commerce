@@ -1,44 +1,96 @@
 import { useEffect, useState } from 'react';
-import { List, Container } from './styles';
-import { OrderCard } from '../../Cards/OrderCard';
-import { retornaPedidosPorCliente } from '../../../services/api/orderAPI';
+import { retornaTodosPedidos, atualizaStatusPedido } from '../../../services/api/orderAPI';
+import { Table, TableHeader, TableRow, TableData, Title } from './styles';
 
-export const OrdersList = () => {
+const statusOptions = [
+    { value: 0, label: 'Aguardando Pagamento' },
+    { value: 1, label: 'Pagamento Rejeitado' },
+    { value: 2, label: 'Pagamento com Sucesso' },
+    { value: 3, label: 'Aguardando Retirada' },
+    { value: 4, label: 'Em Trânsito' },
+    { value: 5, label: 'Entregue' },
+];
+
+const statusMap = {
+    AGUARDANDOPAGAMENTO: 0,
+    PAGAMENTOREJEITADO: 1,
+    PAGAMENTOCOMSUCESSO: 2,
+    AGUARDANDORETIRADA: 3,
+    EMTRANSITO: 4,
+    ENTREGUE: 5,
+};
+
+export const List = () => {
     const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState({});
 
     useEffect(() => {
-        const fecthOrders = async () => {
-            setLoading(true);
-            try {
-                const token = localStorage.getItem('token');
-                const data = await retornaPedidosPorCliente(token);
-                console.log(data);
-                setOrders(data);
-            } catch (error) {
-                setError("Erro ao buscar pedidos");
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
+        const fetchOrders = async () => {
+            const orders = await retornaTodosPedidos();
+            const reversedOrders = orders.reverse();
+            setOrders(reversedOrders);
         }
 
-        fecthOrders();
+        fetchOrders();
     }, []);
 
-    if (loading) return <p>Carregando...</p>
-
-    if (error) return <p>{error}</p>
+    const handleStatusChange = async (orderId, newStatus) => {
+        const order = orders.find(order => order.id === orderId);
+        const confirmChange = window.confirm(`Deseja realmente alterar o status do pedido ${order.pedidoCode} para ${statusOptions.find(option => option.value === newStatus).label}?`);
+        if (confirmChange) {
+            try {
+                await atualizaStatusPedido(orderId, newStatus);
+                alert('Status atualizado com sucesso!');
+                const updatedOrders = await retornaTodosPedidos();
+                const reversedOrders = updatedOrders.reverse();
+                setOrders(reversedOrders);
+            } catch (error) {
+                console.error('Erro ao atualizar status do pedido:', error);
+                alert('Erro ao atualizar status do pedido!');
+            }
+        } else {
+            setSelectedStatus((prevStatus) => ({
+                ...prevStatus,
+                [orderId]: statusMap[order.status],
+            }));
+        }
+    };
 
     return (
-        <Container>
-            <h1>Meus pedidos</h1>
-            <List>
-                {orders.map((order) => (
-                    <OrderCard key={order.id} order={order} />
-                ))}
-            </List>
-        </Container>
+        <>
+            <Title>Lista de Pedidos</Title>
+            <Table>
+                <thead>
+                    <TableRow>
+                        <TableHeader>Data</TableHeader>
+                        <TableHeader>Codigo</TableHeader>
+                        <TableHeader>Valor Total</TableHeader>
+                        <TableHeader>Status</TableHeader>
+                    </TableRow>
+                </thead>
+
+                <tbody>
+                    {orders.map((order) => (
+                        <TableRow key={order.id}>
+                            <TableData>{order.dataDoPedido}</TableData>
+                            <TableData>{order.pedidoCode}</TableData>
+                            <TableData>R$ {order.total}</TableData>
+                            <TableData>
+                                <select
+                                    value={selectedStatus[order.id] !== undefined ? selectedStatus[order.id] : statusMap[order.status]}
+                                    onChange={(e) => handleStatusChange(order.id, parseInt(e.target.value))}
+                                >
+                                    {statusOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </TableData>
+                        </TableRow>
+                    ))}
+                </tbody>
+            </Table>
+        </>
     )
 }
